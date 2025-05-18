@@ -2,9 +2,14 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { useAppIntl } from './locales/useAppIntl'
+import FormattedAppMessage from './locales/FormattedAppMessage'
 
-function App() {
+function App(props: { onLocaleChange: VoidFunction }) {
+  const { onLocaleChange } = props;
   const [count, setCount] = useState(0)
+
+  const { formatMessage } = useAppIntl()
 
   return (
     <>
@@ -19,14 +24,17 @@ function App() {
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+          <FormattedAppMessage id="commonDescriptor.count" values={{ count }} />
+        </button>
+        <button onClick={onLocaleChange}>
+          <FormattedAppMessage id="commonDescriptor.changeLocale" />
         </button>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          <FormattedAppMessage id='commonDescriptor.editDescription' values={{ code: (text) => <code>{text}</code> }} />
         </p>
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        {formatMessage({ id: "commonDescriptor.clickVite" })}
       </p>
     </>
   )
