@@ -1,0 +1,48 @@
+{
+  "name": "typed-intl",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "repository": {
+    "url": "https://github.com/EphraimHaber/typed-intl"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "nodemon ./src/index.ts",
+    "lint": "tsc",
+    "prettier": "npx prettier --write .",
+    "build:w": "pnpm run build --watch",
+    "build": "tsup ./src",
+    "release": "npm run build && changeset publish",
+    "clean": "rimraf dist",
+    "prepublish": "npm run clean && tsc",
+    "start:prod": "npm run clean && tsc && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@changesets/cli": "^2.29.4",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.5.0",
+    "typescript": "~5.8.3"
+  }
+}
