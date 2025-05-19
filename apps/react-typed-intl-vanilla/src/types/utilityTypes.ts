@@ -11,7 +11,7 @@ export type HasProperties<T, P extends PropertyKey> = {
 }[P] extends true ? true : false;
 
 export type ExtractPlaceholders<T extends string> =
-    T extends `${infer _Start}{${infer Key}}${infer Rest}`
+    T extends `${string}{${infer Key}}${infer Rest}`
     ? Key | ExtractPlaceholders<Rest>
     : never;
 
@@ -53,26 +53,26 @@ type FormatXMLElementFn<T extends ReactNode, R extends ReactNode> = (parts: T[])
 export type TagType = FormatXMLElementFn<ReactNode, ReactNode>;
 
 type ExtractTags<T extends string> = T extends `<${infer TagName}>`
-    ? TagName extends `/${infer _}` | `${infer _}/` ? never : [TagName, TagType] // exclude closing and self-closing tags e.g., <br />, <br     >
+    ? TagName extends `/${string}` | `${string}/` ? never : [TagName, TagType] // exclude closing and self-closing tags e.g., <br />, <br     >
     : never;
 
-type SplitVariables<T extends string, Acc = {}> = T extends `${infer _Prefix}{${infer Var}}${infer Suffix}`
+type SplitVariables<T extends string, Acc = object> = T extends `${string}{${infer Var}}${infer Suffix}`
     ? SplitVariables<Suffix, Acc & { [K in ExtractVariableAndType<`{${Var}}`>[0]]: ExtractVariableAndType<`{${Var}}`>[1] }>
-    : T extends `${infer _Prefix}{${infer Var}, ${infer Type}}${infer Suffix}`
+    : T extends `${string}{${infer Var}, ${infer Type}}${infer Suffix}`
     ? SplitVariables<Suffix, Acc & { [K in ExtractVariableAndType<`{${Var}, ${Type}}`>[0]]: ExtractVariableAndType<`{${Var}, ${Type}}`>[1] }>
     : Acc;
 
-type SplitTags<T extends string, Acc = {}> = T extends `${infer _Prefix}<${infer Var}>${infer Suffix}`
+type SplitTags<T extends string, Acc = object> = T extends `${string}<${infer Var}>${infer Suffix}`
     ? SplitTags<Suffix, Acc & { [K in ExtractTags<`<${Var}>`>[0]]: ExtractTags<`<${Var}>`>[1] }>
-    : T extends `${infer _Prefix}<${infer Var}>${infer Suffix}`
+    : T extends `${string}<${infer Var}>${infer Suffix}`
     ? SplitTags<Suffix, Acc & { [K in ExtractTags<`<${Var}>`>[0]]: ExtractTags<`<${Var}>`>[1] }>
     : Acc;
 
 
 // TODO: develop feature based toggle for types. See AllowTags
 export type MessageValues<T extends string, AllowTags = true, AllowVars = true> = Merge<
-    & (AllowTags extends true ? SplitTags<T> : {})
-    & (AllowVars extends true ? SplitVariables<T> : {})>;
+    & (AllowTags extends true ? SplitTags<T> : object)
+    & (AllowVars extends true ? SplitVariables<T> : object)>;
 
 export type ExtractMessageDescriptorValues<T> = CombineIntersections<{
     [Path in FlattenKeys<T>]: NestedPropertyType<T, Path> extends string ? MessageValues<NestedPropertyType<T, Path>> : never;
