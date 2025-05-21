@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { foo } from 'typed-intl';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
+import { foo } from 'typed-intl';
 import './App.css';
 
 foo();

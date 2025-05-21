@@ -2,9 +2,8 @@
   "name": "typed-intl",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "src/index.ts",
+  "main": "src/index.js",
   "private": false,
   "repository": {
     "url": "https://github.com/EphraimHaber/typed-intl"
@@ -15,13 +14,6 @@
     "README.md",
     "package.json"
   ],
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "lint": "tsc",
