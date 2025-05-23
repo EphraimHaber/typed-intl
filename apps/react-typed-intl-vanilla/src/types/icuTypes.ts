@@ -1,11 +1,16 @@
 import type { ReactNode } from "react";
 import type { Merge, CombineIntersections, FlattenKeys, NestedPropertyType } from "./utilityTypes";
+import type { Trim } from "./regexTypes";
 
 
-type ExtractVariableAndType<T extends string> = T extends `{${infer Var}, ${infer Type}}`
-    ? [Var, Type extends 'number' ? number : ReactNode]
+type GetVarType<T extends string> = T extends 'string' ? string : T extends 'number' ? number : T extends 'date' ? Date : ReactNode;
+
+type ExtractVarTypeSkeleton<T extends string> = T extends `{${infer Var}, ${infer Type}, ${infer Skeleton}}`
+    ? [Trim<Var>, GetVarType<Trim<Type>>, Trim<Skeleton>]
+    : T extends `{${infer Var}, ${infer Type}}`
+    ? [Trim<Var>, GetVarType<Trim<Type>>]
     : T extends `{${infer Var}}`
-    ? [Var, ReactNode]
+    ? [Trim<Var>, ReactNode]
     : never;
 
 type FormatXMLElementFn<T extends ReactNode, R extends ReactNode> = (parts: T[]) => R;
@@ -16,9 +21,9 @@ type ExtractTags<T extends string> = T extends `<${infer TagName}>`
     : never;
 
 type SplitVariables<T extends string, Acc = object> = T extends `${string}{${infer Var}}${infer Suffix}`
-    ? SplitVariables<Suffix, Acc & { [K in ExtractVariableAndType<`{${Var}}`>[0]]: ExtractVariableAndType<`{${Var}}`>[1] }>
+    ? SplitVariables<Suffix, Acc & { [K in ExtractVarTypeSkeleton<`{${Var}}`>[0]]: ExtractVarTypeSkeleton<`{${Var}}`>[1] }>
     : T extends `${string}{${infer Var}, ${infer Type}}${infer Suffix}`
-    ? SplitVariables<Suffix, Acc & { [K in ExtractVariableAndType<`{${Var}, ${Type}}`>[0]]: ExtractVariableAndType<`{${Var}, ${Type}}`>[1] }>
+    ? SplitVariables<Suffix, Acc & { [K in ExtractVarTypeSkeleton<`{${Var}, ${Type}}`>[0]]: ExtractVarTypeSkeleton<`{${Var}, ${Type}}`>[1] }>
     : Acc;
 
 type SplitTags<T extends string, Acc = object> = T extends `${string}<${infer Var}>${infer Suffix}`
