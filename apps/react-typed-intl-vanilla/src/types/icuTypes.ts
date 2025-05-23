@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { Merge, CombineIntersections, FlattenKeys, NestedPropertyType } from "./utilityTypes";
-import type { Trim } from "./regexTypes";
+import type { Trim } from "./stringTypes";
 
 
 type GetVarType<T extends string> = T extends 'string' ? string : T extends 'number' ? number : T extends 'date' ? Date : ReactNode;
