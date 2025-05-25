@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import type { Merge, CombineIntersections, FlattenKeys, NestedPropertyType } from "./utilityTypes";
-import type { Trim } from "./stringTypes";
+import type { ExtractBracesAtLevel, Trim } from "./stringTypes";
 
 
 type GetVarType<T extends string> = T extends 'string' ? string : T extends 'number' ? number : T extends 'date' ? Date : ReactNode;
 
-type ExtractVarTypeSkeleton<T extends string> = T extends `{${infer Var}, ${infer Type}, ${infer Skeleton}}`
+type ExtractVarTypeSkeleton<T extends string> = T extends `{${infer Var},${infer Type},${infer Skeleton}}`
     ? [Trim<Var>, GetVarType<Trim<Type>>, Trim<Skeleton>]
     : T extends `{${infer Var}, ${infer Type}}`
     ? [Trim<Var>, GetVarType<Trim<Type>>]
@@ -20,11 +20,9 @@ type ExtractTags<T extends string> = T extends `<${infer TagName}>`
     ? TagName extends `/${string}` | `${string}/` ? never : [TagName, TagType] // exclude closing and self-closing tags e.g., <br />, <br     >
     : never;
 
-type SplitVariables<T extends string, Acc = object> = T extends `${string}{${infer Var}}${infer Suffix}`
-    ? SplitVariables<Suffix, Acc & { [K in ExtractVarTypeSkeleton<`{${Var}}`>[0]]: ExtractVarTypeSkeleton<`{${Var}}`>[1] }>
-    : T extends `${string}{${infer Var}, ${infer Type}}${infer Suffix}`
-    ? SplitVariables<Suffix, Acc & { [K in ExtractVarTypeSkeleton<`{${Var}, ${Type}}`>[0]]: ExtractVarTypeSkeleton<`{${Var}, ${Type}}`>[1] }>
-    : Acc;
+type VarMapping<Placeholder extends `{${string}}`> = { [K in ExtractVarTypeSkeleton<Placeholder>[0]]: ExtractVarTypeSkeleton<Placeholder>[1] }
+
+type SplitVariables<T extends string> = ExtractBracesAtLevel<T, 1> extends "" ? object : VarMapping<ExtractBracesAtLevel<T, 1>>;
 
 type SplitTags<T extends string, Acc = object> = T extends `${string}<${infer Var}>${infer Suffix}`
     ? SplitTags<Suffix, Acc & { [K in ExtractTags<`<${Var}>`>[0]]: ExtractTags<`<${Var}>`>[1] }>
