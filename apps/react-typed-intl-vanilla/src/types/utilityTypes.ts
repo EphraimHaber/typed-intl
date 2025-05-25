@@ -31,3 +31,13 @@ export type FlattenObject<T> = {
 export type CombineIntersections<T> = {
     [K in keyof T]: T[K] extends infer O ? { [P in keyof O]: O[P] } : never;
 };
+
+export type UnionToIntersection<U> =
+    (U extends any ? (x: U) => void : never) extends (x: infer I) => void
+    ? I
+    : never;
+
+export type UnionLast<U> =
+    UnionToIntersection<U extends any ? () => U : never> extends () => infer R
+    ? R
+    : never;
