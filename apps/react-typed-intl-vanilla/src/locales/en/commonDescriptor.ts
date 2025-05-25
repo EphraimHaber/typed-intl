@@ -1,5 +1,11 @@
 
 export const commonDescriptor = {
+    "date": "Now is {date, date, ::M}",
+    "complexMsg": `{numPhotos, plural,
+      =0 {Usted no tiene fotos.}
+      =1 {Usted tiene una foto.}
+      other {Usted tiene # fotos.}
+    }`,
     "yesSave": "Yes Save",
     "noDontSave": "No, Don't Save",
     "linkExample": "Click on this <link>{url}</link>",
