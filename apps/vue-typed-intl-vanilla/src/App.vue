@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
 import HelloWorld from './components/HelloWorld.vue';
+import { foo } from './locales/example';
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import HelloWorld from './components/HelloWorld.vue';
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
+      <h1>{{ foo('my_messages.hello', { name: 'XDD' }) }}</h1>
       <HelloWorld msg="You did it!" />
 
       <nav>

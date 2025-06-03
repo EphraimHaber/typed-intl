@@ -1,0 +1,6 @@
+{
+    "my_messages": {
+        "hello": "Hello, {name}!",
+        "hello2": "Hell!"
+    }
+}
