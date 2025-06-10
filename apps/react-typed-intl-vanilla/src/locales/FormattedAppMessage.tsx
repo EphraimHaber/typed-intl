@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import type { Props as ReactIntlFormattedMessageProps } from "react-intl/src/components/message";
 import { FormattedMessage as ReactIntlFormattedMessage } from "react-intl";
 import { enMessages } from "./index";
-import type { ExtractMessageDescriptorValues, FlattenKeys } from "../types/utilityTypes";
+import type { FlattenKeys } from "../types/utilityTypes";
+import type { ExtractMessageDescriptorValues } from "../types/icuTypes";
 
 
 type Messages = typeof enMessages;
